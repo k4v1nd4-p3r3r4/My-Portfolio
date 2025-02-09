@@ -30,6 +30,12 @@
     @keyframes blink-caret {
         50% { border-color: transparent; }
     }
+
+
+    .skill-bar {
+        transition: width 1s ease-in-out;
+        width: 0;
+    }
     </style>
 </head>
 <body>
@@ -53,7 +59,7 @@
                 <h1 class="text-5xl font-bold typing">
                     Hello, I'm Kavinda Perera
                 </h1>
-                <p class="text-xl mt-4 transition-opacity hover:opacity-80 duration-500 ">
+                <p class="text-xl mt-4 transition-opacity hover:opacity-80 duration-500 typing">
                     A passionate web developer
                 </p>
             </div>
@@ -83,7 +89,7 @@
                         <span class="text-lg font-medium text-gray-700">90%</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-4">
-                        <div class="bg-gray-800 h-4 rounded-full" style="width: 90%;"></div>
+                        <div class="bg-gray-800 h-4 rounded-full skill-bar" data-width="90%"></div>
                     </div>
                 </div>
                 <!-- Repeat for other skills -->
@@ -93,12 +99,10 @@
                         <span class="text-lg font-medium text-gray-700">60%</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-4">
-                        <div class="bg-gray-800 h-4 rounded-full" style="width: 60%;"></div>
+                        <div class="bg-gray-800 h-4 rounded-full skill-bar" data-width="60%"></div>
                     </div>
                 </div>
-
             </div>
-            
         </div>
     </section>
 
@@ -154,5 +158,30 @@
             <a href="https://github.com/johndoe" class="text-gray-300 hover:text-white"><i class="fab fa-github"></i></a>
         </div>
     </footer>
+
+
+    <script>
+        // Create an Intersection Observer instance
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                // Check if the skill section is in the viewport
+                if (entry.isIntersecting) {
+                    // Find all skill bars in the section
+                    const skillBars = entry.target.querySelectorAll('.skill-bar');
+                    skillBars.forEach(bar => {
+                        // Set the width to trigger the fill animation
+                        const width = bar.getAttribute('data-width');
+                        bar.style.width = width;
+                    });
+                    // Stop observing once the animation is triggered
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 }); // Trigger when 50% of the section is visible
+    
+        // Observe the skills section
+        const skillsSection = document.getElementById('skills');
+        observer.observe(skillsSection);
+    </script>
 </body>
 </html>
